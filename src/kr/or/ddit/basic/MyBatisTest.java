@@ -3,7 +3,9 @@ package kr.or.ddit.basic;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.io.Resources;
@@ -123,25 +125,24 @@ public class MyBatisTest {
 //		} finally {
 //			session.close();
 //		}
-		
+
 		/////////////////////////////////////////////
-		
+
 		// 2-4) select 연습
 		// 1) 응답의 결과가 여러개일 경우...
 		System.out.println("select 연습 (결과가 여러 개일 경우...)");
-		
+
 		session = sqlSessionFactory.openSession(true);
-		
+
 		try {
 			List<MemberVO> memList = session.selectList("memberTest.selectAllMember");
-			
+
 			for (MemberVO mv2 : memList) {
 				System.out.println("ID : " + mv2.getMemId());
 				System.out.println("이름 : " + mv2.getMemName());
 				System.out.println("전화번호 : " + mv2.getMemTel());
 				System.out.println("주소 : " + mv2.getMemAddr());
-				
-				
+
 				System.out.println("------------------------------------------------------------");
 			}
 			System.out.println("전체 회원정보 출력 끝...");
@@ -150,13 +151,44 @@ public class MyBatisTest {
 		} finally {
 			session.close();
 		}
-		
+
 		// 2) 응답의 결과가 1개일 경우...
 		System.out.println("select 연습 (결과가 한 개일 경우...)");
 		session = sqlSessionFactory.openSession(true);
-		
+
 		try {
 			MemberVO mv3 = session.selectOne("memberTest.getMember", "d001");
+
+			System.out.println("ID : " + mv3.getMemId());
+			System.out.println("이름 : " + mv3.getMemName());
+			System.out.println("전화번호 : " + mv3.getMemTel());
+			System.out.println("주소 : " + mv3.getMemAddr());
+
+			System.out.println("------------------------------------------------------------");
+
+		} catch (PersistenceException ex) {
+			ex.printStackTrace();
+		} finally {
+			session.close();
+		}
+		
+		// VO가 아닌 Map을 이용한 방식 
+		System.out.println("select 연습 (VO가 아닌 Map을 이용한 방식)...");
+		session = sqlSessionFactory.openSession(true);
+
+		try {
+			Map<String, String> paramMap = new HashMap<String, String>();
+			paramMap.put("memId", "d001");
+			
+			Map<String, Object> resultMap = session.selectOne("memberTest.getMember2", paramMap);
+
+			System.out.println("ID : " + resultMap.get("MEM_ID"));
+			System.out.println("이름 : " + resultMap.get("MEM_NAME"));
+			System.out.println("전화번호 : " + resultMap.get("MEM_TEL"));
+			System.out.println("주소 : " + resultMap.get("MEM_ADDR"));
+
+			System.out.println("------------------------------------------------------------");
+
 		} catch (PersistenceException ex) {
 			ex.printStackTrace();
 		} finally {
