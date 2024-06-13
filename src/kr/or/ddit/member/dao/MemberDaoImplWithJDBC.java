@@ -187,7 +187,7 @@ public class MemberDaoImplWithJDBC implements IMemberDao {
 		try {
 			conn = JDBCUtil3.getConnection();
 
-			String sql = "select * from mymember where 1 = 1";
+			String sql = "select * from mymember where 1=1 ";
 			if (mv.getMemId() != null && !mv.getMemId().equals("")) {
 				sql += " and mem_id = ? ";
 			}

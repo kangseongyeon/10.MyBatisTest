@@ -106,11 +106,11 @@
 			<if test='memName != null and memName != ""'>
 				and mem_name = #{memName}
 			</if>
-			<if test='memTel != null and !memTel.equals("")'>
+			<if test='memTel != null and !memTel != "" '>
 				and mem_tel = #{memTel}
 			</if>
-			<if test='memAddr != null and memAddr != ""'>
-				and mem_addr like '
+			<if test='memAddr != null and memAddr != "" '>
+				and mem_addr like '%' || #{memAddr} || '%' 
 			</if>
 		</where> 
 	
